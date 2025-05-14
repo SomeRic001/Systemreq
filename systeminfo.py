@@ -11,6 +11,13 @@ try:
         l_core = psutil.cpu_count(logical = True)
         #GPU info
         gpu_name = GPUtil.getGPUs()[0].name
+        gpu_name = gpu_name.strip()
+        gpu_brand = gpu_name.split(' ')[0]
+        parts = gpu_name.split()
+        if parts[0].lower() in ['nvidia','amd','intel']:
+            parts = parts[1:]
+        parts = parts[:-1]
+        gpu_name = ' '.join(parts)
         vram = GPUtil.getGPUs()[0].memoryTotal
         #OS info
         system = platform.system()
@@ -34,17 +41,17 @@ try:
             maximum_free = max(maximum_free, usage.free)
 
         disc = round(maximum_free / (1024 ** 3), 2)
-        return frequency, p_core, l_core, ram, disc, gpu_name, vram, os_details, driver_version
+        return frequency, p_core, l_core, ram, disc,gpu_brand, gpu_name, vram, os_details, driver_version
     
     def print_info():
-        frequency, p_core, l_core, ram, disc, gpu_name, vram, os_details, driver_version = get_info()
+        frequency, p_core, l_core, ram, disc, gpu_brand, gpu_name, vram, os_details, driver_version = get_info()
         print("Your System Information:")
         print(f"CPU Max Frequency: {frequency.max/1000} GHz")
         print(f"Physical Cores: {p_core}")
         print(f"Logical Cores: {l_core}")
         print(f"RAM: {ram} GB")
         print(f"Free Storage: {disc} GB")
-        print(f"GPU: {gpu_name}")
+        print(f"GPU: {gpu_brand} {gpu_name}")
         print(f"VRAM: {round(vram/1024)} GB")
         print(f"OS: {os_details}")
         print(f"Driver Version: {driver_version}")
@@ -59,7 +66,7 @@ try:
             print("Exiting the program.")
         
     def requirements(game_name):
-       frequency, p_core, l_core, ram, disc, gpu_name, vram, os_details, driver_version = get_info()
+       frequency, p_core, l_core, ram, disc,gpu_brand, gpu_name, vram, os_details, driver_version = get_info()
        g_n = game_name.lower()
        # Read the CSV file
        df = pd.read_csv(r"C:\Users\LENOVO\OneDrive\Documents\Info\game1.csv")
