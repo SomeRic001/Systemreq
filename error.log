@@ -1,1 +1,5 @@
 2025-05-15 12:08:42,724-ERROR-The CSV file was not found. Please check the file path.
+2025-05-16 00:36:48,429-ERROR-The CSV file was not found. Please check the file path.
+2025-05-16 01:47:15,739-ERROR-The CSV file was not found. Please check the file path.
+2025-05-20 19:08:29,470-ERROR-An error occurred: 'str' object has no attribute 'slice'
+2025-05-20 20:22:29,797-ERROR-An error occurred: invalid literal for int() with base 10: 'ad'

@@ -30,7 +30,7 @@ def get_info():
     #OS info
     system = platform.system()
     system_version = platform.version()
-    os_details = platform.platform().split('-')[0]
+    os_details = platform.platform().split('-')[0] + " "+ platform.platform().split('-')[1]
     #Driver info
     if system =="Windows":
         driver_version_raw = subprocess.check_output("wmic path win32_videocontroller get driverversion", shell = True).decode('utf-8').strip()
@@ -87,6 +87,8 @@ def main():
         print("Exiting the program.")
     
 def requirements(game_name):
+    Run = True
+    reqram = 0
     try:
         frequency, p_core, l_core, ram, disc,gpu_brand, gpu_name, vram, os_details, driver_version = get_info()
     except Exception as e:
@@ -94,7 +96,7 @@ def requirements(game_name):
         return
     g_n = game_name.lower()
     # Read the CSV file
-    df = pd.read_csv(r"C:\Users\LENOVO\OneDrive\Documents\Info\gae1.csv")
+    df = pd.read_csv(r"C:\Users\LENOVO\OneDrive\Documents\Info\game1.csv")
     matches = df[df['name'].str.lower().str.contains(g_n,na = False)]
     if matches.empty:
         print("No matching games found.")
@@ -104,20 +106,33 @@ def requirements(game_name):
     for match in matches['name'].to_list():
         n+=1
         print(f"{n}. {match} \n")
-    selected_game = input("Select the game number: ") 
+    selected_game = input("Select the game number:😭 ") 
     selected = int(selected_game) - 1
     if not selected_game.isdigit() or int(selected_game) < 1 or int(selected_game) > len(matches):
         print("Invalid selection. Please enter a valid game number.")
         return
     print (f"Selected game: {matches['name'].to_list()[selected]}")
-    print("Game Requirements:")
+    requirements = {"CPU":matches['CPU:'].to_list()[selected],
+                    "RAM":matches['Memory:'].to_list()[selected],
+                    "Disc":matches['File Size:'].to_list()[selected],
+                    "GPU":matches['Graphics Card:'].to_list()[selected],
+                    "OS":matches['OS:'].to_list()[selected]
+                    }
+    if "MB" in requirements["RAM"]:                
+        reqram = int(requirements["RAM"].strip("MB"))
+        reqram= reqram/1024
+    elif "GB" in requirements["RAM"]:
+        reqram = int(requirements["RAM"].strip("GB"))
+    print("\nGame Requirements:")
     print(
-        f"CPU: {matches['CPU:'].to_list()[selected]} or higher\n"
-        f"RAM: {matches['Memory:'].to_list()[selected]}\n"
-        f"Storage: {matches['File Size:'].to_list()[selected]}\n"
-        f"GPU: {matches['Graphics Card:'].to_list()[selected]} or higher\n"
-        f"Operating System: {matches['OS:'].to_list()[selected]}"
+        f"CPU: {requirements["CPU"]}or higher\n"
+        f"RAM: {requirements["RAM"]}\n"
+        f"Storage: {requirements["Disc"]}\n"
+        f"GPU: {requirements["GPU"]} or higher\n"
+        f"Operating System: {requirements["OS"]}"
         )
+
+    
     again = input("Do you want to check another game? (y/n): ")
     if again.lower() == 'y':
         game_name = input("Enter the game name: ")
