@@ -87,7 +87,6 @@ def main():
         print("Exiting the program.")
     
 def requirements(game_name):
-    Run = True
     reqram = 0
     try:
         frequency, p_core, l_core, ram, disc,gpu_brand, gpu_name, vram, os_details, driver_version = get_info()
