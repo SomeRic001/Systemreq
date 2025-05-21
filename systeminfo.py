@@ -96,6 +96,7 @@ def requirements(game_name):
     g_n = game_name.lower()
     # Read the CSV file
     df = pd.read_csv(r"C:\Users\LENOVO\OneDrive\Documents\Info\game1.csv")
+    gpu_df = pd.read_csv(r"C:\Users\LENOVO\OneDrive\Documents\Info\gpu.csv")
     matches = df[df['name'].str.lower().str.contains(g_n,na = False)]
     if matches.empty:
         print("No matching games found.")
@@ -105,7 +106,7 @@ def requirements(game_name):
     for match in matches['name'].to_list():
         n+=1
         print(f"{n}. {match} \n")
-    selected_game = input("Select the game number:😭 ") 
+    selected_game = input("Select the game number:") 
     selected = int(selected_game) - 1
     if not selected_game.isdigit() or int(selected_game) < 1 or int(selected_game) > len(matches):
         print("Invalid selection. Please enter a valid game number.")
